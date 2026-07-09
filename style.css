@@ -475,3 +475,34 @@ img {
 body {
     overflow-x: hidden;
 }
+.reviews {
+    padding: 60px 20px;
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.review-box {
+    max-width: 700px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.review-box h3 {
+    color: #f4b400;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.review-box p {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.review-box h4 {
+    margin-top: 15px;
+    color: #0056b3;
+}
