@@ -1,0 +1,5 @@
+User-agent: *
+
+Allow: /
+
+Sitemap: https://deepvihar.github.io/deepvihar//sitemap.xml
