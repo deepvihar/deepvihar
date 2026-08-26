@@ -334,6 +334,27 @@ We focus on Bihar Board preparation, regular tests, experienced teachers and bet
 
 <script src="script.js"></script>
 
+ <!-- ================================================= -->
+    <!-- ⬇️ YAHAN SE AAPKO APNA NAYA CODE PASTE KARNA HAI ⬇️ -->
+    <!-- ================================================= -->
 
+    <div id="chat-widget-container"></div>
+
+    <script>
+        fetch('chat.html')
+            .then(response => response.text())
+            .then(data => {
+                const container = document.getElementById('chat-widget-container');
+                container.innerHTML = data;
+
+                const scripts = container.getElementsByTagName("script");
+                for (let i = 0; i < scripts.length; i++) {
+                    const newScript = document.createElement("script");
+                    newScript.text = scripts[i].text;
+                    document.body.appendChild(newScript);
+                }
+            })
+            .catch(error => console.error('Error loading chat widget:', error));
+    </script>
 </body>
 </html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor-Patient Messaging</title>
+    <style>
+        /* Floating Button Design */
+        .floating-chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #007bff; /* Medical Blue */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .floating-chat-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Chat Pop-up Box Design */
+        .chat-popup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 320px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        /* Header Design */
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Form Layout */
+        .chat-form {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-form input, .chat-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .chat-form textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        .submit-btn {
+            background-color: #28a745; /* Green Color for Submit */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Floating Button -->
+    <button class="floating-chat-btn" id="openChatBtn">💬</button>
+
+    <!-- 2. Message Pop-up Box -->
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header">
+            Message the Doctor
+            <button class="close-btn" id="closeChatBtn">&times;</button>
+        </div>
+        <form class="chat-form" id="patientForm">
+            <input type="text" id="patientName" placeholder="Your Name" required>
+            <input type="tel" id="patientPhone" placeholder="Mobile Number" required>
+            <textarea id="patientMessage" placeholder="Write your message here..." required></textarea>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+
+    <!-- 3. JavaScript -->
+    <script>
+        const openBtn = document.getElementById('openChatBtn');
+        const closeBtn = document.getElementById('closeChatBtn');
+        const chatPopup = document.getElementById('chatPopup');
+        const patientForm = document.getElementById('patientForm');
+
+        // Open chat window on button click
+        openBtn.addEventListener('click', () => {
+            chatPopup.style.display = 'block';
+            openBtn.style.display = 'none'; 
+        });
+
+        // Close chat window on 'x' click
+        closeBtn.addEventListener('click', () => {
+            chatPopup.style.display = 'none';
+            openBtn.style.display = 'block'; 
+        });
+
+        // Handle form submission
+        patientForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+
+            const name = document.getElementById('patientName').value;
+            const phone = document.getElementById('patientPhone').value;
+            const message = document.getElementById('patientMessage').value;
+
+            // Log data to console for now
+            console.log("Patient Name:", name);
+            console.log("Phone Number:", phone);
+            console.log("Message:", message);
+
+            // Show English alert message
+            alert(`Thank you ${name}! Your message has been sent to the doctor. We will contact you soon.`);
+
+            // Reset and close form
+            patientForm.reset();
+            chatPopup.style.display = 'none';
+            openBtn.style.display = 'block';
+        });
+    </script>
+
+</body>
+</html>
