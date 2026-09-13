@@ -10,9 +10,47 @@
     --text-light: #666666;
     --bg-light: #f4f7f6;
     --white: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --card-bg: #ffffff;
     --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
+    --border-color: rgba(0, 0, 0, 0.06);
     --transition: all 0.3s ease;
+}
+
+/* =========================================
+   DARK MODE THEME (डार्क मोड के लिए रंग)
+========================================= */
+body.dark-mode {
+    --bg-light: #0f172a;
+    --text-dark: #f1f5f9;
+    --text-light: #94a3b8;
+    --white: #1e293b;
+    --nav-bg: rgba(15, 23, 42, 0.95);
+    --card-bg: #1e293b;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.6);
+    --border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .section-title {
+    color: #60a5fa;
+}
+
+body.dark-mode .card h3,
+body.dark-mode .review-box h4,
+body.dark-mode .nav-logo-text,
+body.dark-mode .mobile-menu-btn {
+    color: #93c5fd;
+}
+
+body.dark-mode .nav-links a:hover {
+    background: #334155;
+    color: #ffffff;
+}
+
+body.dark-mode .contact-box i {
+    color: #60a5fa;
 }
 
 /* Global Styles */
@@ -29,6 +67,7 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
@@ -49,6 +88,7 @@ a {
     color: #1e3c72;
     margin-bottom: 40px;
     position: relative;
+    transition: color 0.3s ease;
 }
 
 .section-title::after {
@@ -68,7 +108,7 @@ a {
     display: inline-block;
     padding: 14px 28px;
     background: var(--primary-gradient);
-    color: var(--white);
+    color: #ffffff;
     font-weight: 600;
     border-radius: 30px;
     transition: var(--transition);
@@ -81,7 +121,7 @@ a {
 .btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(30, 60, 114, 0.5);
-    color: var(--white);
+    color: #ffffff;
 }
 
 .btn.whatsapp-btn {
@@ -95,7 +135,7 @@ a {
 
 /* Navigation */
 nav {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     position: fixed;
     width: 100%;
@@ -130,9 +170,11 @@ nav .nav-container {
     border-radius: 50%;
 }
 
+/* Nav Links & Toggle Alignment */
 .nav-links {
     display: flex;
-    gap: 5px;
+    align-items: center; /* यह टॉगल को बिल्कुल सीधा और एक लाइन में रखेगा */
+    gap: 10px;
 }
 
 .nav-links a {
@@ -142,11 +184,42 @@ nav .nav-container {
     font-size: 15px;
     border-radius: 20px;
     transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
 }
 
 .nav-links a:hover {
     background: var(--bg-light);
     color: #1e3c72;
+}
+
+/* Dark Mode Toggle Button Styling */
+#theme-toggle,
+.theme-toggle,
+.dark-mode-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text-dark);
+    padding: 6px 12px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+#theme-toggle:hover,
+.theme-toggle:hover,
+.dark-mode-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.1);
+}
+
+body.dark-mode #theme-toggle:hover,
+body.dark-mode .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .mobile-menu-btn {
@@ -159,7 +232,7 @@ nav .nav-container {
 /* Hero Section */
 .hero {
     background: var(--primary-gradient);
-    color: var(--white);
+    color: #ffffff;
     padding: 160px 20px 100px;
     text-align: center;
     position: relative;
@@ -199,10 +272,10 @@ nav .nav-container {
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    border: 4px solid var(--white);
+    border: 4px solid #ffffff;
     margin-bottom: 25px;
     box-shadow: var(--shadow-soft);
-    background: var(--white);
+    background: #ffffff;
 }
 
 .hero h2 {
@@ -250,6 +323,7 @@ nav .nav-container {
     padding: 100px 0;
     background: var(--white);
     text-align: center;
+    transition: background 0.3s ease;
 }
 
 .about p {
@@ -262,6 +336,7 @@ nav .nav-container {
 /* Cards Layout (Courses, Results, Tests) */
 .courses, .results, .test-section {
     padding: 80px 0;
+    transition: background 0.3s ease;
 }
 
 .courses { background: var(--bg-light); }
@@ -276,13 +351,13 @@ nav .nav-container {
 }
 
 .card {
-    background: var(--white);
+    background: var(--card-bg);
     padding: 40px 30px;
     border-radius: 20px;
     box-shadow: var(--shadow-soft);
     text-align: center;
     transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
 }
@@ -313,6 +388,7 @@ nav .nav-container {
     font-size: 24px;
     color: #1e3c72;
     margin-bottom: 15px;
+    transition: color 0.3s ease;
 }
 
 .card p {
@@ -324,12 +400,12 @@ nav .nav-container {
 .admission {
     padding: 100px 0;
     background: var(--secondary-gradient);
-    color: var(--white);
+    color: #ffffff;
     text-align: center;
 }
 
 .admission .section-title {
-    color: var(--white);
+    color: #ffffff !important;
 }
 
 .admission .section-title::after {
@@ -357,6 +433,7 @@ nav .nav-container {
 .gallery {
     padding: 80px 0;
     background: var(--white);
+    transition: background 0.3s ease;
 }
 
 .gallery-grid {
@@ -383,6 +460,7 @@ nav .nav-container {
 .reviews {
     padding: 80px 0;
     background: var(--bg-light);
+    transition: background 0.3s ease;
 }
 
 .reviews > p {
@@ -393,13 +471,14 @@ nav .nav-container {
 }
 
 .review-box {
-    background: var(--white);
+    background: var(--card-bg);
     padding: 30px;
     border-radius: 20px;
     box-shadow: var(--shadow-soft);
     margin-bottom: 20px;
     transition: var(--transition);
     text-align: center;
+    border: 1px solid var(--border-color);
 }
 
 .review-box:hover {
@@ -421,12 +500,14 @@ nav .nav-container {
 .review-box h4 {
     color: #1e3c72;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 /* Contact Section */
 .contact {
     padding: 80px 0;
     background: var(--white);
+    transition: background 0.3s ease;
 }
 
 .contact > p {
@@ -447,6 +528,8 @@ nav .nav-container {
     border-radius: 20px;
     box-shadow: var(--shadow-soft);
     text-align: center;
+    border: 1px solid var(--border-color);
+    transition: background 0.3s ease;
 }
 
 .contact-box p {
@@ -462,12 +545,13 @@ nav .nav-container {
 .contact-box i {
     color: #1e3c72;
     font-size: 24px;
+    transition: color 0.3s ease;
 }
 
 /* Footer */
 .footer {
-    background: #0f172a;
-    color: var(--white);
+    background: #0b1120;
+    color: #ffffff;
     padding: 60px 0 20px;
     text-align: center;
 }
@@ -510,7 +594,7 @@ nav .nav-container {
     background: rgba(255, 255, 255, 0.05);
     padding: 10px 20px;
     border-radius: 30px;
-    color: var(--white);
+    color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -555,7 +639,7 @@ nav .nav-container {
         top: 70px;
         left: 0;
         width: 100%;
-        background: var(--white);
+        background: var(--nav-bg);
         flex-direction: column;
         padding: 20px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
