@@ -1,4 +1,6 @@
-/* STREAMING_CHUNK:Defining CSS Variables and Dark Mode Options */
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 /* CSS Variables for Consistent Theming */
 :root {
     --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -11,31 +13,8 @@
     --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.15);
     --transition: all 0.3s ease;
-    
-    /* New Variables for the Light/Dark Theme Switching */
-    --title-color: #1e3c72;
-    --nav-bg: rgba(255, 255, 255, 0.95);
-    --card-border: rgba(0, 0, 0, 0.02);
 }
 
-/* Dark Mode Overrides */
-body.dark-mode {
-    --primary-gradient: linear-gradient(135deg, #0a192f 0%, #112240 100%);
-    --secondary-gradient: linear-gradient(135deg, #112240, #233554, #4364F7);
-    --text-dark: #e6f1ff;
-    --text-light: #8892b0;
-    --bg-light: #0b1120;
-    --white: #151e32;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
-    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.5);
-    
-    /* Adjusted colors for dark backgrounds */
-    --title-color: #6FB1FC; 
-    --nav-bg: rgba(11, 17, 32, 0.95);
-    --card-border: rgba(255, 255, 255, 0.05);
-}
-
-/* STREAMING_CHUNK:Styling Global Elements and Buttons */
 /* Global Styles */
 * {
     margin: 0;
@@ -50,7 +29,6 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 a {
@@ -68,7 +46,7 @@ a {
     text-align: center;
     font-size: 36px;
     font-weight: 700;
-    color: var(--title-color);
+    color: #1e3c72;
     margin-bottom: 40px;
     position: relative;
 }
@@ -90,11 +68,11 @@ a {
     display: inline-block;
     padding: 14px 28px;
     background: var(--primary-gradient);
-    color: #ffffff; /* Keep buttons strictly white text regardless of mode */
+    color: var(--white);
     font-weight: 600;
     border-radius: 30px;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
     border: none;
     cursor: pointer;
     text-align: center;
@@ -102,8 +80,8 @@ a {
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(30, 60, 114, 0.5);
+    color: var(--white);
 }
 
 .btn.whatsapp-btn {
@@ -115,10 +93,9 @@ a {
     box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
 }
 
-/* STREAMING_CHUNK:Configuring Navigation and Theme Toggle */
 /* Navigation */
 nav {
-    background: var(--nav-bg);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     position: fixed;
     width: 100%;
@@ -141,7 +118,7 @@ nav .nav-container {
 .nav-logo-text {
     font-weight: 700;
     font-size: 20px;
-    color: var(--title-color);
+    color: #1e3c72;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -151,13 +128,6 @@ nav .nav-container {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-}
-
-/* New layout wrapper for right side elements */
-.nav-right-container {
-    display: flex;
-    align-items: center;
-    gap: 20px;
 }
 
 .nav-links {
@@ -176,52 +146,34 @@ nav .nav-container {
 
 .nav-links a:hover {
     background: var(--bg-light);
-    color: var(--title-color);
-}
-
-/* Theme Toggle Styles */
-.theme-toggle {
-    cursor: pointer;
-    font-size: 20px;
-    color: var(--title-color);
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.theme-toggle:hover {
-    background: var(--bg-light);
-    transform: scale(1.1);
+    color: #1e3c72;
 }
 
 .mobile-menu-btn {
     display: none;
     font-size: 24px;
     cursor: pointer;
-    color: var(--title-color);
+    color: #1e3c72;
 }
 
-/* STREAMING_CHUNK:Styling the Hero Section */
 /* Hero Section */
 .hero {
     background: var(--primary-gradient);
-    color: #ffffff;
+    color: var(--white);
     padding: 160px 20px 100px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: background 0.4s ease;
 }
 
 .hero::before {
     content: '';
     position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
     animation: rotateBg 20s linear infinite;
 }
 
@@ -293,13 +245,11 @@ nav .nav-container {
     flex-wrap: wrap;
 }
 
-/* STREAMING_CHUNK:Layout for Grid Sections (About, Courses, Results) */
 /* About Section */
 .about {
     padding: 100px 0;
     background: var(--white);
     text-align: center;
-    transition: background-color 0.4s ease;
 }
 
 .about p {
@@ -312,7 +262,6 @@ nav .nav-container {
 /* Cards Layout (Courses, Results, Tests) */
 .courses, .results, .test-section {
     padding: 80px 0;
-    transition: background-color 0.4s ease;
 }
 
 .courses { background: var(--bg-light); }
@@ -333,7 +282,7 @@ nav .nav-container {
     box-shadow: var(--shadow-soft);
     text-align: center;
     transition: var(--transition);
-    border: 1px solid var(--card-border);
+    border: 1px solid rgba(0, 0, 0, 0.02);
     position: relative;
     overflow: hidden;
 }
@@ -341,7 +290,10 @@ nav .nav-container {
 .card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 5px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
     background: var(--secondary-gradient);
     transform: scaleX(0);
     transform-origin: left;
@@ -359,7 +311,7 @@ nav .nav-container {
 
 .card h3 {
     font-size: 24px;
-    color: var(--title-color);
+    color: #1e3c72;
     margin-bottom: 15px;
 }
 
@@ -368,18 +320,18 @@ nav .nav-container {
     font-size: 16px;
 }
 
-/* STREAMING_CHUNK:Configuring Admission, Gallery and Reviews */
 /* Admission Section */
 .admission {
     padding: 100px 0;
     background: var(--secondary-gradient);
-    color: #ffffff;
+    color: var(--white);
     text-align: center;
 }
 
 .admission .section-title {
-    color: #ffffff;
+    color: var(--white);
 }
+
 .admission .section-title::after {
     background: var(--accent-color);
 }
@@ -387,7 +339,7 @@ nav .nav-container {
 .admission-box {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 600px;
     margin: 0 auto;
     padding: 40px;
@@ -448,7 +400,6 @@ nav .nav-container {
     margin-bottom: 20px;
     transition: var(--transition);
     text-align: center;
-    border: 1px solid var(--card-border);
 }
 
 .review-box:hover {
@@ -468,11 +419,10 @@ nav .nav-container {
 }
 
 .review-box h4 {
-    color: var(--title-color);
+    color: #1e3c72;
     font-weight: 600;
 }
 
-/* STREAMING_CHUNK:Finalizing Contact, Footer and Mobile Queries */
 /* Contact Section */
 .contact {
     padding: 80px 0;
@@ -497,7 +447,6 @@ nav .nav-container {
     border-radius: 20px;
     box-shadow: var(--shadow-soft);
     text-align: center;
-    border: 1px solid var(--card-border);
 }
 
 .contact-box p {
@@ -508,18 +457,17 @@ nav .nav-container {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    flex-wrap: wrap;
 }
 
 .contact-box i {
-    color: var(--title-color);
+    color: #1e3c72;
     font-size: 24px;
 }
 
 /* Footer */
 .footer {
     background: #0f172a;
-    color: #ffffff;
+    color: var(--white);
     padding: 60px 0 20px;
     text-align: center;
 }
@@ -528,6 +476,7 @@ nav .nav-container {
     font-size: 28px;
     margin-bottom: 15px;
     background: var(--secondary-gradient);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -541,6 +490,7 @@ nav .nav-container {
     color: #94a3b8;
     transition: var(--transition);
 }
+
 .footer a:hover {
     color: var(--accent-color);
 }
@@ -557,11 +507,11 @@ nav .nav-container {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     padding: 10px 20px;
     border-radius: 30px;
-    color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .social-links a:hover {
@@ -573,7 +523,7 @@ nav .nav-container {
 .footer hr {
     border: none;
     height: 1px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     margin: 30px 0 20px;
 }
 
@@ -600,7 +550,7 @@ nav .nav-container {
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-links {
-        display: none; /* Hide for mobile by default */
+        display: none;
         position: absolute;
         top: 70px;
         left: 0;
@@ -608,12 +558,14 @@ nav .nav-container {
         background: var(--white);
         flex-direction: column;
         padding: 20px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
+    
     .nav-links.active {
         display: flex;
     }
+    
     .mobile-menu-btn {
         display: block;
     }
