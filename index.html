@@ -25,7 +25,6 @@
         gtag('js', new Date());
         gtag('config', 'G-HNSCX512W5');
     </script>
-
 </head>
 <body>
 
@@ -36,17 +35,27 @@
                 <img src="logo.jpeg" alt="Logo">
                 Deep Vihar
             </a>
-            <div class="mobile-menu-btn" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="#home" onclick="toggleMenu()">Home</a>
-                <a href="#about" onclick="toggleMenu()">About</a>
-                <a href="#courses" onclick="toggleMenu()">Courses</a>
-                <a href="#results" onclick="toggleMenu()">Results</a>
-                <a href="#gallery" onclick="toggleMenu()">Gallery</a>
-                <a href="#admission" onclick="toggleMenu()">Admission</a>
-                <a href="#contact" onclick="toggleMenu()">Contact</a>
+            
+            <!-- Grouped nav links and actions for better flex layout -->
+            <div class="nav-right-container">
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" onclick="toggleMenu()">Home</a>
+                    <a href="#about" onclick="toggleMenu()">About</a>
+                    <a href="#courses" onclick="toggleMenu()">Courses</a>
+                    <a href="#results" onclick="toggleMenu()">Results</a>
+                    <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+                    <a href="#admission" onclick="toggleMenu()">Admission</a>
+                    <a href="#contact" onclick="toggleMenu()">Contact</a>
+                </div>
+                
+                <!-- Theme Toggle Button -->
+                <div class="theme-toggle" id="theme-toggle" title="Toggle Dark/Light Mode">
+                    <i class="fas fa-moon"></i>
+                </div>
+
+                <div class="mobile-menu-btn" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>
             </div>
         </div>
     </nav>
