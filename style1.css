@@ -528,7 +528,9 @@ nav .nav-container {
     font-size: 28px;
     margin-bottom: 15px;
     background: var(--secondary-gradient);
+    background-clip: text;
     -webkit-background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
 }
 
