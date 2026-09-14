@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor-Patient Messaging</title>
+    <title>Teacher-Student Messaging</title>
     <style>
         /* Floating Button Design */
         .floating-chat-btn {
@@ -121,45 +121,58 @@
 
     <!-- 3. JavaScript -->
     <script>
-        const openBtn = document.getElementById('openChatBtn');
-        const closeBtn = document.getElementById('closeChatBtn');
-        const chatPopup = document.getElementById('chatPopup');
-        const patientForm = document.getElementById('patientForm');
+    const openBtn = document.getElementById('openChatBtn');
+    const closeBtn = document.getElementById('closeChatBtn');
+    const chatPopup = document.getElementById('chatPopup');
+    const patientForm = document.getElementById('patientForm');
 
-        // Open chat window on button click
-        openBtn.addEventListener('click', () => {
-            chatPopup.style.display = 'block';
-            openBtn.style.display = 'none'; 
-        });
+    // Open chat window on button click
+    openBtn.addEventListener('click', () => {
+        chatPopup.style.display = 'block';
+        openBtn.style.display = 'none'; 
+    });
 
-        // Close chat window on 'x' click
-        closeBtn.addEventListener('click', () => {
-            chatPopup.style.display = 'none';
-            openBtn.style.display = 'block'; 
-        });
+    // Close chat window on 'x' click
+    closeBtn.addEventListener('click', () => {
+        chatPopup.style.display = 'none';
+        openBtn.style.display = 'block'; 
+    });
 
-        // Handle form submission
-        patientForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
+    // Handle form submission
+    patientForm.addEventListener('submit', (e) => {
+        e.preventDefault(); 
 
-            const name = document.getElementById('patientName').value;
-            const phone = document.getElementById('patientPhone').value;
-            const message = document.getElementById('patientMessage').value;
+        const name = document.getElementById('patientName').value;
+        const phone = document.getElementById('patientPhone').value;
+        const message = document.getElementById('patientMessage').value;
 
-            // Log data to console for now
-            console.log("Patient Name:", name);
-            console.log("Phone Number:", phone);
-            console.log("Message:", message);
+        // आपका Google Form URL (formResponse के साथ)
+        const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSf7iL32xhQ4AY-5YRzhBWNlXke-vibrlQ1gjKT9NnD_0BWctw/formResponse";
+        
+        // FormData बनाकर आपकी Entry IDs के साथ डेटा जोड़ना
+        const formData = new FormData();
+        formData.append('entry.689396538', name);    
+        formData.append('entry.91211394', phone);   
+        formData.append('entry.1480498779', message);
 
-            // Show English alert message
+        // Fetch API से बिना पेज रीलोड किए Google Form में डेटा भेजना
+        fetch(googleFormURL, {
+            method: "POST",
+            mode: "no-cors", 
+            body: formData
+        }).then(() => {
             alert(`Thank you ${name}! Your message has been sent to the Teacher. We will contact you soon.`);
 
-            // Reset and close form
+            // फॉर्म रीसेट करना और पॉप-अप बंद करना
             patientForm.reset();
             chatPopup.style.display = 'none';
             openBtn.style.display = 'block';
+        }).catch(error => {
+            console.error('Error!', error.message);
+            alert("Something went wrong. Please try again.");
         });
-    </script>
+    });
+</script>
 
 </body>
 </html>
