@@ -92,7 +92,7 @@ async function getUserData(uid) {
     return null;
 }
 
-// === View Public User Profile (New Feature) ===
+// === View Public User Profile ===
 window.viewUserProfile = async function(uid) {
     if (!uid || uid === "undefined") {
         alert("This is an older post. User profile not available.");

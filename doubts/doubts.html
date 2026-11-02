@@ -19,13 +19,19 @@
                 Deep Vihar
             </a>
             <div class="nav-right-container">
-                <div class="nav-links">
+                <div class="hamburger" id="hamburger-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+                
+                <div class="nav-links" id="nav-menu">
                     <a href="../index.html">Home</a>
                     <a href="#" id="nav-login-btn">Login</a>
                     <a href="#" id="nav-profile-btn" style="display: none;"><i class="fas fa-user-circle"></i> Profile</a>
                     <a href="#" id="nav-logout-btn" style="display: none;">Logout</a>
                 </div>
-                <div class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></div>
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
             </div>
         </div>
     </nav>
@@ -46,7 +52,10 @@
             <button class="filter-btn" data-filter="class12">12th</button>
             <button class="filter-btn" data-filter="job">Govt Job</button>
         </div>
-        <div id="questions-container" class="questions-list"><div class="loader">Loading questions...</div></div>
+
+        <div id="questions-container" class="questions-list">
+            <div class="loader">Loading questions...</div>
+        </div>
     </section>
 
     <!-- Modal 1: Ask Question -->
@@ -97,7 +106,7 @@
         </div>
     </div>
 
-    <!-- Modal 3: Authentication (Login/Signup) -->
+    <!-- Modal 3: Authentication -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="close-auth-modal">&times;</span>
@@ -124,7 +133,7 @@
         </div>
     </div>
 
-    <!-- Modal 4: Personal User Profile (Private) -->
+    <!-- Modal 4: Personal User Profile -->
     <div id="profile-modal" class="modal">
         <div class="modal-content profile-card">
             <span class="close-modal" id="close-profile-modal">&times;</span>
@@ -142,7 +151,7 @@
         </div>
     </div>
 
-    <!-- Modal 5: Public User Profile (For viewing others) -->
+    <!-- Modal 5: Public User Profile -->
     <div id="public-profile-modal" class="modal">
         <div class="modal-content profile-card">
             <span class="close-modal" id="close-public-profile-modal">&times;</span>
@@ -162,6 +171,7 @@
     <script type="module" src="doubts.js"></script>
 
     <script>
+        // Theme Toggle Script
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
         if (localStorage.getItem('theme') === 'dark') {
@@ -178,6 +188,15 @@
                 themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
             }
         });
+
+        // Mobile Hamburger Menu Script
+        const hamburger = document.getElementById('hamburger-menu');
+        const navMenu = document.getElementById('nav-menu');
+        if (hamburger) {
+            hamburger.addEventListener('click', function () {
+                navMenu.classList.toggle('active');
+            });
+        }
     </script>
 </body>
 </html>
