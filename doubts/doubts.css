@@ -428,3 +428,39 @@
         display: flex !important;
     }
 }
+/* Mobile Navigation (Hamburger Menu) */
+.hamburger {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--title-color);
+    margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 20px !important; /* Forces menu to the right side */
+        left: auto !important;  /* Prevents it from snapping to the left */
+        background: var(--white);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        width: 200px;
+        text-align: center;
+        gap: 15px;
+        z-index: 1000;
+        border: 1px solid var(--card-border);
+    }
+
+    .nav-links.active {
+        display: flex !important;
+    }
+}
