@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubt Board | Deep Vihar Coaching Center</title>
+    <link rel="icon" type="image/jpeg" href="../logo.jpeg">
+    <link rel="stylesheet" href="../style1.css">
+    <link rel="stylesheet" href="doubts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo-text">
+                <img src="../logo.jpeg" alt="Logo">
+                Deep Vihar
+            </a>
+            <div class="nav-right-container">
+                <div class="nav-links">
+                    <a href="../index.html">Home</a>
+                    <a href="#" id="nav-login-btn">Login</a>
+                    <a href="#" id="nav-profile-btn" style="display: none;"><i class="fas fa-user-circle"></i> Profile</a>
+                    <a href="#" id="nav-logout-btn" style="display: none;">Logout</a>
+                </div>
+                <div class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero doubt-hero">
+        <div class="hero-content">
+            <h2>❓ Doubt Board</h2>
+            <h1>Your Questions, Our Solutions</h1>
+            <p>Ask questions from any subject and get verified answers from our top students and teachers.</p>
+            <button class="btn" id="open-question-modal">Ask a Question</button>
+        </div>
+    </section>
+
+    <section class="doubt-feed container">
+        <div class="doubt-filters">
+            <button class="filter-btn active" data-filter="all">All Questions</button>
+            <button class="filter-btn" data-filter="class10">10th</button>
+            <button class="filter-btn" data-filter="class12">12th</button>
+            <button class="filter-btn" data-filter="job">Govt Job</button>
+        </div>
+        <div id="questions-container" class="questions-list"><div class="loader">Loading questions...</div></div>
+    </section>
+
+    <!-- Modal 1: Ask Question -->
+    <div id="question-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-q-modal">&times;</span>
+            <h3 class="modal-title">Ask a New Question</h3>
+            <form id="ask-question-form">
+                <div class="input-group">
+                    <label>Class / Category</label>
+                    <select id="question-category" required>
+                        <option value="class10">Class 10th</option>
+                        <option value="class12">Class 12th</option>
+                        <option value="job">Govt Job</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Your Question</label>
+                    <textarea id="question-text" rows="4" required placeholder="Describe your doubt in detail..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Image Link (Optional)</label>
+                    <input type="url" id="question-image" placeholder="Paste image link here if any">
+                </div>
+                <button type="submit" class="btn" id="submit-btn">Post Question</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Submit Answer -->
+    <div id="answer-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-a-modal">&times;</span>
+            <h3 class="modal-title">Write an Answer</h3>
+            <form id="submit-answer-form">
+                <input type="hidden" id="answer-question-id">
+                <div class="input-group">
+                    <label>Your Answer</label>
+                    <textarea id="answer-text" rows="4" required placeholder="Write your step-by-step solution..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Image Link (Optional)</label>
+                    <input type="url" id="answer-image" placeholder="Paste solution image link here if any">
+                </div>
+                <button type="submit" class="btn" id="submit-answer-btn">Post Answer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Authentication (Login/Signup) -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-auth-modal">&times;</span>
+            <h3 class="modal-title" id="auth-title">Login</h3>
+            <form id="auth-form">
+                <div class="input-group" id="signup-name-group" style="display: none;">
+                    <label>Full Name</label>
+                    <input type="text" id="auth-name" placeholder="Enter your full name">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="auth-email" required placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="auth-password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn" id="auth-submit-btn">Login</button>
+                <p style="margin-top: 15px; text-align: center; font-size: 14px;">
+                    <span id="auth-switch-text">Don't have an account?</span> 
+                    <a href="#" id="auth-switch-link" style="color: var(--title-color); font-weight: bold;">Sign Up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 4: Personal User Profile (Private) -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content profile-card">
+            <span class="close-modal" id="close-profile-modal">&times;</span>
+            <div class="profile-header-ui">
+                <div class="profile-avatar"><i class="fas fa-user-graduate"></i></div>
+                <h2 class="profile-name-text"><span id="profile-name"></span> <span id="profile-badge"></span></h2>
+                <p class="profile-email-text"><i class="fas fa-envelope"></i> <span id="profile-email"></span></p>
+            </div>
+            <div class="profile-stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-thumbs-up"></i></div>
+                    <div class="stat-info"><h3 id="profile-likes-count">0</h3><p>Total Likes</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: Public User Profile (For viewing others) -->
+    <div id="public-profile-modal" class="modal">
+        <div class="modal-content profile-card">
+            <span class="close-modal" id="close-public-profile-modal">&times;</span>
+            <div class="profile-header-ui">
+                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                <h2 class="profile-name-text"><span id="public-profile-name"></span> <span id="public-profile-badge"></span></h2>
+            </div>
+            <div class="profile-stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon"><i class="fas fa-star" style="color: #ecc94b;"></i></div>
+                    <div class="stat-info"><h3 id="public-profile-likes-count">0</h3><p>Total Likes</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="doubts.js"></script>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        themeToggleBtn.addEventListener('click', function () {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+    </script>
+</body>
+</html>
