@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Vihar - Sunday Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f8ff; padding: 20px; }
+        .quiz-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .subject-badge { background-color: #e67e22; color: white; padding: 5px 10px; border-radius: 5px; font-size: 14px; }
+        .timer { font-size: 18px; font-weight: bold; color: #e74c3c; background: #fadbd8; padding: 5px 10px; border-radius: 5px; }
+        .question { font-size: 20px; color: #333; margin-bottom: 20px; }
+        .option { display: block; width: 100%; padding: 12px; margin-bottom: 10px; background-color: #f8f9f9; border: 2px solid #bdc3c7; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left; transition: 0.2s; }
+        .option:hover { background-color: #e8f6f3; border-color: #3498db; }
+        .correct { background-color: #2ecc71 !important; color: white; border-color: #27ae60 !important; }
+        .wrong { background-color: #e74c3c !important; color: white; border-color: #c0392b !important; }
+        .btn { width: 100%; padding: 15px; background-color: #3498db; color: white; border: none; border-radius: 8px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .btn:hover { background-color: #2980b9; }
+        .screen { display: none; text-align: center; }
+        .final-score { font-size: 40px; color: #27ae60; font-weight: bold; margin: 10px 0; }
+        .dvr-coins { font-size: 24px; color: #f39c12; font-weight: bold; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Deep Vihar - Sunday Quiz</h1>
+        
+        <div id="loading-screen" class="screen" style="display: block;">
+            <h2><i class="fas fa-spinner fa-spin"></i> Checking Account...</h2>
+            <p>Please wait.</p>
+        </div>
+
+        <div id="login-screen" class="screen">
+            <h2 style="color: #e74c3c;"><i class="fas fa-lock"></i> Login Required</h2>
+            <p>You must be logged in to play the Sunday Quiz and earn DV Coins.</p>
+            <button class="btn" onclick="location.href='doubts.html'">Go to Doubt Hub to Login</button>
+        </div>
+
+        <div id="lock-screen" class="screen">
+            <h2 style="color: #e74c3c;"><i class="fas fa-clock"></i> Quiz is Closed</h2>
+            <p>The Sunday Quiz is only open on <b>Sundays between 8:00 PM and 9:00 PM</b>.</p>
+            <p>Winners and Leaderboard will be announced on the Doubt Hub after 9:00 PM!</p>
+            <button class="btn" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
+        </div>
+
+        <div id="already-played-screen" class="screen">
+            <h2 style="color: #2ecc71;"><i class="fas fa-check-circle"></i> Quiz Completed!</h2>
+            <p>You have already submitted your quiz for this week.</p>
+            <p>Please wait until 9:00 PM for the results and Top 3 Leaderboard!</p>
+            <button class="btn" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
+        </div>
+
+        <div id="start-screen" class="screen">
+            <h2>Welcome, <span id="player-name">Student</span>!</h2>
+            <p>The quiz is now open. You have 20 minutes to answer 20 questions.</p>
+            <p>Make sure to finish before 9:00 PM.</p>
+            <button class="btn" id="start-btn" style="background-color: #2ecc71;">Start Quiz Now</button>
+        </div>
+
+        <div id="quiz-screen" class="screen" style="text-align: left;">
+            <div class="header-info">
+                <div class="subject-badge" id="subject-text">Subject</div>
+                <div class="timer" id="timer-display">20:00</div>
+            </div>
+            <div class="question" id="question-text">Question goes here?</div>
+            <div id="options-container"></div>
+            <button class="btn" id="next-btn" style="display: none;">Next Question &rarr;</button>
+        </div>
+
+        <div id="score-screen" class="screen">
+            <h2>Quiz Submitted!</h2>
+            <p>Your Score:</p>
+            <div class="final-score" id="score-display">0 / 20</div>
+            <p>Participation Reward:</p>
+            <div class="dvr-coins">+2 DV Coins 🪙</div>
+            <p style="font-size: 14px; color: #7f8c8d;">Top 3 winners will receive extra coins (50/30/10) and Badges after 9:00 PM.</p>
+            <button class="btn" style="background-color: #2ecc71;" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDqsjSCdLR66wp8oaDUbErBumFnS4LccSQ",
+            authDomain: "deepvihar-60ba7.firebaseapp.com",
+            projectId: "deepvihar-60ba7",
+            storageBucket: "deepvihar-60ba7.firebasestorage.app",
+            messagingSenderId: "77079056276",
+            appId: "1:77079056276:web:76afc69aed7d3d3f458981"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let questionsList = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 1200;
+        let timerInterval;
+        let currentUser = null;
+        let startTime = 0;
+
+        function getSundayId() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+            document.getElementById(screenId).style.display = 'block';
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                showScreen('login-screen');
+                return;
+            }
+            
+            currentUser = user;
+            const now = new Date();
+            const day = now.getDay(); 
+            const hour = now.getHours(); 
+
+            if (day === 0 && hour === 20) {
+                const resultDoc = await getDoc(doc(db, "quiz_results", `${getSundayId()}_${user.uid}`));
+                if (resultDoc.exists()) {
+                    showScreen('already-played-screen');
+                } else {
+                    const userProfile = await getDoc(doc(db, "users", user.uid));
+                    if(userProfile.exists()) {
+                        document.getElementById('player-name').innerText = userProfile.data().name;
+                    }
+                    showScreen('start-screen');
+                }
+            } else {
+                showScreen('lock-screen');
+            }
+        });
+
+        document.getElementById('start-btn').addEventListener('click', async () => {
+            document.getElementById('start-btn').innerText = "Loading Questions...";
+            document.getElementById('start-btn').disabled = true;
+            await fetchQuiz();
+        });
+
+        async function fetchQuiz() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "sunday_quiz"));
+                querySnapshot.forEach((doc) => { questionsList.push(doc.data()); });
+                
+                if(questionsList.length > 0) {
+                    startTime = Date.now();
+                    showScreen('quiz-screen');
+                    showQuestion();
+                    startTimer();
+                } else {
+                    alert("No questions found in database!");
+                }
+            } catch (error) {
+                console.error("Error: ", error);
+                alert("Server error, please try again.");
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('timer-display').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const currentQ = questionsList[currentQuestionIndex];
+            document.getElementById('subject-text').innerText = currentQ.subject;
+            document.getElementById('question-text').innerText = `Q${currentQuestionIndex + 1}. ${currentQ.question}`;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = ""; 
+            document.getElementById('next-btn').style.display = 'none';
+
+            currentQ.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option';
+                btn.innerText = option;
+                btn.onclick = () => checkAnswer(btn, option, currentQ.correctAnswer);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedBtn, selectedText, correctText) {
+            const allOptions = document.querySelectorAll('.option');
+            allOptions.forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'not-allowed';
+                if(btn.innerText === correctText) btn.classList.add('correct');
+            });
+
+            if(selectedText !== correctText) selectedBtn.classList.add('wrong');
+            else score++;
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questionsList.length) showQuestion();
+            else endQuiz();
+        });
+
+        async function endQuiz() {
+            clearInterval(timerInterval);
+            showScreen('score-screen');
+            document.getElementById('score-display').innerText = `${score} / ${questionsList.length}`;
+            
+            const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+            const userName = document.getElementById('player-name').innerText;
+
+            try {
+                await setDoc(doc(db, "quiz_results", `${getSundayId()}_${currentUser.uid}`), {
+                    uid: currentUser.uid,
+                    name: userName,
+                    score: score,
+                    timeTaken: timeTaken,
+                    date: getSundayId(),
+                    timestamp: serverTimestamp()
+                });
+
+                await updateDoc(doc(db, "users", currentUser.uid), { 
+                    dvCoins: increment(2) 
+                });
+            } catch (e) {
+                console.error("Error saving score: ", e);
+            }
+        }
+    </script>
+</body>
+</html>

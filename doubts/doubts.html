@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doubt Board | Deep Vihar Coaching Center</title>
+    <meta name="description" content="Deep Vihar Coaching Center's Doubt Hub. Ask questions for Class 10th, 12th, and Govt Jobs. Get verified step-by-step solutions from top students and teachers.">
+    <title>Doubt Hub | Ask Questions & Get Solutions | Deep Vihar</title>
+    
     <link rel="icon" type="image/jpeg" href="../logo.jpeg">
     <link rel="stylesheet" href="../style1.css">
     <link rel="stylesheet" href="doubts.css">
@@ -20,18 +22,16 @@
             </a>
             <div class="nav-right-container">
                 <div class="nav-links" id="nav-menu">
-                    <a href="../index.html">Home</a>
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="quiz.html"><i class="fas fa-trophy"></i> Sunday Quiz</a>
                     <a href="#" id="nav-login-btn">Login</a>
+                    <a href="#" id="nav-inbox-btn" style="display: none;"><i class="fas fa-envelope"></i> Inbox</a>
                     <a href="#" id="nav-profile-btn" style="display: none;"><i class="fas fa-user-circle"></i> Profile</a>
                     <a href="#" id="nav-logout-btn" style="display: none;">Logout</a>
                 </div>
-                
-                <!-- 1. Theme Toggle (Moon Icon) -->
                 <div class="theme-toggle" id="theme-toggle">
                     <i class="fas fa-moon"></i>
                 </div>
-                
-                <!-- 2. Hamburger Menu (3 Lines) - Now placed after Theme Toggle -->
                 <div class="hamburger" id="hamburger-menu">
                     <i class="fas fa-bars"></i>
                 </div>
@@ -41,10 +41,17 @@
 
     <section class="hero doubt-hero">
         <div class="hero-content">
-            <h2>❓ Doubt Board</h2>
+            <h2><i class="fas fa-lightbulb" style="color: #ecc94b;"></i> Doubt Hub</h2>
             <h1>Your Questions, Our Solutions</h1>
             <p>Ask questions from any subject and get verified answers from our top students and teachers.</p>
             <button class="btn" id="open-question-modal">Ask a Question</button>
+        </div>
+    </section>
+
+    <section class="leaderboard-section container">
+        <h3 class="section-title"><i class="fas fa-trophy" style="color: #ecc94b;"></i> Top Contributors</h3>
+        <div class="leaderboard-list" id="leaderboard-list">
+            <div class="loader" style="font-size: 14px;">Loading rankings...</div>
         </div>
     </section>
 
@@ -59,128 +66,83 @@
         <div id="questions-container" class="questions-list">
             <div class="loader">Loading questions...</div>
         </div>
+        
+        <div id="load-more-trigger" style="text-align: center; padding: 30px 0;">
+            <i class="fas fa-spinner fa-spin" id="load-more-spinner" style="display: none; font-size: 24px; color: #2b6cb0;"></i>
+        </div>
     </section>
 
-    <!-- Modal 1: Ask Question -->
-    <div id="question-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" id="close-q-modal">&times;</span>
-            <h3 class="modal-title">Ask a New Question</h3>
-            <form id="ask-question-form">
-                <div class="input-group">
-                    <label>Class / Category</label>
-                    <select id="question-category" required>
-                        <option value="class10">Class 10th</option>
-                        <option value="class12">Class 12th</option>
-                        <option value="job">Govt Job</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Your Question</label>
-                    <textarea id="question-text" rows="4" required placeholder="Describe your doubt in detail..."></textarea>
-                </div>
-                <div class="input-group">
-                    <label>Image Link (Optional)</label>
-                    <input type="url" id="question-image" placeholder="Paste image link here if any">
-                </div>
-                <button type="submit" class="btn" id="submit-btn">Post Question</button>
-            </form>
-        </div>
-    </div>
+    <!-- Modals for Question, Answer, Auth, Profile (Same as before) -->
+    <div id="question-modal" class="modal"><div class="modal-content"><span class="close-modal" id="close-q-modal">&times;</span><h3 class="modal-title">Ask a New Question</h3><form id="ask-question-form"><div class="input-group"><label>Category</label><select id="question-category" required><option value="class10">Class 10th</option><option value="class12">Class 12th</option><option value="job">Govt Job</option><option value="other">Other</option></select></div><div class="input-group"><label>Your Question</label><textarea id="question-text" rows="4" required placeholder="Describe your doubt..."></textarea></div><div class="input-group"><label>Image Link (Optional)</label><input type="url" id="question-image" placeholder="Paste image link"></div><button type="submit" class="btn" id="submit-btn">Post Question</button></form></div></div>
 
-    <!-- Modal 2: Submit Answer -->
-    <div id="answer-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" id="close-a-modal">&times;</span>
-            <h3 class="modal-title">Write an Answer</h3>
-            <form id="submit-answer-form">
-                <input type="hidden" id="answer-question-id">
-                <div class="input-group">
-                    <label>Your Answer</label>
-                    <textarea id="answer-text" rows="4" required placeholder="Write your step-by-step solution..."></textarea>
-                </div>
-                <div class="input-group">
-                    <label>Image Link (Optional)</label>
-                    <input type="url" id="answer-image" placeholder="Paste solution image link here if any">
-                </div>
-                <button type="submit" class="btn" id="submit-answer-btn">Post Answer</button>
-            </form>
-        </div>
-    </div>
+    <div id="answer-modal" class="modal"><div class="modal-content"><span class="close-modal" id="close-a-modal">&times;</span><h3 class="modal-title">Write an Answer</h3><form id="submit-answer-form"><input type="hidden" id="answer-question-id"><div class="input-group"><label>Your Answer</label><textarea id="answer-text" rows="4" required placeholder="Write solution..."></textarea></div><div class="input-group"><label>Image Link (Optional)</label><input type="url" id="answer-image" placeholder="Paste image link"></div><button type="submit" class="btn" id="submit-answer-btn">Post Answer</button></form></div></div>
 
-    <!-- Modal 3: Authentication -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" id="close-auth-modal">&times;</span>
-            <h3 class="modal-title" id="auth-title">Login</h3>
-            <form id="auth-form">
-                <div class="input-group" id="signup-name-group" style="display: none;">
-                    <label>Full Name</label>
-                    <input type="text" id="auth-name" placeholder="Enter your full name">
-                </div>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="auth-email" required placeholder="Enter your email">
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="auth-password" required placeholder="Enter your password">
-                </div>
-                <button type="submit" class="btn" id="auth-submit-btn">Login</button>
-                <p style="margin-top: 15px; text-align: center; font-size: 14px;">
-                    <span id="auth-switch-text">Don't have an account?</span> 
-                    <a href="#" id="auth-switch-link" style="color: var(--title-color); font-weight: bold;">Sign Up</a>
-                </p>
-            </form>
-        </div>
-    </div>
+    <div id="auth-modal" class="modal"><div class="modal-content"><span class="close-modal" id="close-auth-modal">&times;</span><h3 class="modal-title" id="auth-title">Login</h3><form id="auth-form"><div class="input-group" id="signup-name-group" style="display: none;"><label>Full Name</label><input type="text" id="auth-name" placeholder="Enter your full name"></div><div class="input-group"><label>Email</label><input type="email" id="auth-email" required placeholder="Enter your email"></div><div class="input-group"><label>Password</label><input type="password" id="auth-password" required placeholder="Enter your password"></div><button type="submit" class="btn" id="auth-submit-btn">Login</button><p style="margin-top: 15px; text-align: center; font-size: 14px;"><span id="auth-switch-text">Don't have an account?</span> <a href="#" id="auth-switch-link" style="color: var(--title-color); font-weight: bold;">Sign Up</a></p></form></div></div>
 
-    <!-- Modal 4: Personal User Profile -->
-    <div id="profile-modal" class="modal">
-        <div class="modal-content profile-card">
-            <span class="close-modal" id="close-profile-modal">&times;</span>
-            <div class="profile-header-ui">
-                <div class="profile-avatar"><i class="fas fa-user-graduate"></i></div>
-                <h2 class="profile-name-text"><span id="profile-name"></span> <span id="profile-badge"></span></h2>
-                <p class="profile-email-text"><i class="fas fa-envelope"></i> <span id="profile-email"></span></p>
-            </div>
-            <div class="profile-stats-container">
-                <div class="stat-box">
-                    <div class="stat-icon"><i class="fas fa-thumbs-up"></i></div>
-                    <div class="stat-info"><h3 id="profile-likes-count">0</h3><p>Total Likes</p></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="profile-modal" class="modal"><div class="modal-content profile-card"><span class="close-modal" id="close-profile-modal">&times;</span><div class="profile-header-ui"><div class="profile-avatar" id="profile-avatar-container"><i class="fas fa-user-graduate"></i></div><h2 class="profile-name-text"><span id="profile-name"></span> <span id="profile-badge"></span></h2><p class="profile-email-text"><i class="fas fa-envelope"></i> <span id="profile-email"></span></p><p class="profile-bio-text" id="profile-bio"></p><button class="action-btn" id="edit-profile-btn" style="margin: 15px auto 0; font-size: 12px; padding: 6px 12px; border: 1px solid var(--title-color);"><i class="fas fa-edit"></i> Edit Profile</button><div id="edit-profile-form" style="display: none; margin-top: 15px; text-align: left; background: var(--bg-light); padding: 15px; border-radius: 10px;"><div class="input-group"><label style="font-size: 12px;">Profile Picture Link</label><input type="url" id="edit-photo-url" placeholder="Paste image link here" style="padding: 8px;"></div><div class="input-group"><label style="font-size: 12px;">Bio</label><input type="text" id="edit-bio" placeholder="E.g., Class 12 Topper" style="padding: 8px;" maxlength="50"></div><button class="btn" id="save-profile-btn" style="width: 100%; padding: 8px;">Save</button></div></div><div class="profile-stats-container"><div class="stat-box"><div class="stat-icon"><i class="fas fa-thumbs-up"></i></div><div class="stat-info"><h3 id="profile-likes-count">0</h3><p>Likes</p></div></div><div class="stat-box"><div class="stat-icon" style="color: #ea580c; background: #ffedd5;"><i class="fas fa-coins"></i></div><div class="stat-info"><h3 id="profile-coins-count">0</h3><p>DV Coins</p></div></div></div></div></div>
 
-    <!-- Modal 5: Public User Profile -->
+    <!-- Public Profile Modal (Updated with Message Button) -->
     <div id="public-profile-modal" class="modal">
         <div class="modal-content profile-card">
             <span class="close-modal" id="close-public-profile-modal">&times;</span>
             <div class="profile-header-ui">
-                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                <div class="profile-avatar" id="public-profile-avatar-container"><i class="fas fa-user"></i></div>
                 <h2 class="profile-name-text"><span id="public-profile-name"></span> <span id="public-profile-badge"></span></h2>
+                <p class="profile-bio-text" id="public-profile-bio"></p>
             </div>
             <div class="profile-stats-container">
                 <div class="stat-box">
                     <div class="stat-icon"><i class="fas fa-star" style="color: #ecc94b;"></i></div>
-                    <div class="stat-info"><h3 id="public-profile-likes-count">0</h3><p>Total Likes</p></div>
+                    <div class="stat-info"><h3 id="public-profile-likes-count">0</h3><p>Likes</p></div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon" style="color: #ea580c; background: #ffedd5;"><i class="fas fa-coins"></i></div>
+                    <div class="stat-info"><h3 id="public-profile-coins-count">0</h3><p>DV Coins</p></div>
                 </div>
             </div>
+            <button class="btn" id="public-msg-btn" style="width: 100%; margin-top: 15px; display: none;"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </div>
+    </div>
+
+    <!-- Inbox Modal -->
+    <div id="inbox-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-inbox-modal">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-envelope"></i> Your Messages</h3>
+            <div class="inbox-list" id="inbox-list">
+                <div class="loader">Loading chats...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Room Modal -->
+    <div id="chat-modal" class="modal">
+        <div class="modal-content" style="padding: 15px; display: flex; flex-direction: column; height: 80vh; max-height: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; margin-bottom: 10px;">
+                <h3 class="modal-title" style="margin: 0; font-size: 16px;"><i class="fas fa-user-circle"></i> <span id="chat-user-name">User</span></h3>
+                <span class="close-modal" id="close-chat-modal" style="position: static; font-size: 24px;">&times;</span>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Messages will load here -->
+            </div>
+            <form id="chat-form" class="chat-footer">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." required autocomplete="off">
+                <button type="submit" class="btn" style="padding: 10px 15px; border-radius: 50%;"><i class="fas fa-paper-plane"></i></button>
+            </form>
         </div>
     </div>
 
     <script type="module" src="doubts.js"></script>
 
     <script>
-        // Theme Toggle Script
         const themeToggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
+        
         if (localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
         }
+        
         themeToggleBtn.addEventListener('click', function () {
             body.classList.toggle('dark-mode');
             if (body.classList.contains('dark-mode')) {
@@ -192,9 +154,9 @@
             }
         });
 
-        // Mobile Hamburger Menu Script
         const hamburger = document.getElementById('hamburger-menu');
         const navMenu = document.getElementById('nav-menu');
+        
         if (hamburger) {
             hamburger.addEventListener('click', function () {
                 navMenu.classList.toggle('active');
