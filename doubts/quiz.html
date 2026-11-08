@@ -22,6 +22,20 @@
         .screen { display: none; text-align: center; }
         .final-score { font-size: 40px; color: #27ae60; font-weight: bold; margin: 10px 0; }
         .dvr-coins { font-size: 24px; color: #f39c12; font-weight: bold; margin-bottom: 20px; }
+        
+        /* Modal Backgrounds & Content */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: white; margin: auto; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; color: #888; cursor: pointer; transition: 0.2s; }
+        .close-modal:hover { color: #e74c3c; }
+        
+        /* Chat UI Styles */
+        .chat-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px; margin-bottom: 15px; height: 350px; }
+        .msg-bubble { padding: 8px 14px; border-radius: 18px; max-width: 80%; font-size: 13px; line-height: 1.4; word-wrap: break-word; }
+        .msg-sent { background: #2b6cb0; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg-received { background: #e2e8f0; color: #1a202c; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chat-footer { display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid #ccc; outline: none; background: #fff; }
     </style>
 </head>
 <body>
@@ -80,11 +94,71 @@
             <p style="font-size: 14px; color: #7f8c8d;">Top 3 winners will receive extra coins (50/30/10) and Badges after 9:00 PM.</p>
             <button class="btn" style="background-color: #2ecc71;" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
         </div>
+
+        <!-- LEADERBOARD SECTION -->
+        <div id="leaderboard-section" style="display: none; margin: 30px auto 0 auto; background: #1e272e; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <h3 style="color: #ffd700; margin-top: 0; margin-bottom: 15px; font-family: sans-serif;"><i class="fas fa-crown"></i> Sunday Winners</h3>
+            <div id="leaderboard-list" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- JS will populate winners here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PUBLIC PROFILE MODAL (Updated Icon) -->
+    <div id="public-profile-modal" class="modal-overlay">
+        <div class="modal-content" style="background: linear-gradient(to bottom, #f8fafc, #ffffff); text-align: center;">
+            <span class="close-modal" id="close-public-profile-modal">&times;</span>
+            <div style="margin-bottom: 30px;">
+                <div id="public-profile-avatar-container" style="width: 100px; height: 100px; background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 45px; margin: 0 auto 15px; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 style="font-size: 24px; color: #2d3748; margin-bottom: 5px;"><span id="public-profile-name">Loading...</span> <span id="public-profile-badge"></span></h2>
+                <p id="public-profile-bio" style="font-size: 14px; color: #4a5568; font-style: italic;"></p>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 15px; border-top: 1px solid #e2e8f0; padding-top: 25px;">
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 15px; padding: 15px; flex: 1; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="background: #ebf8ff; color: #ecc94b; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;"><i class="fas fa-star"></i></div>
+                    <div style="text-align: left;">
+                        <h3 id="public-profile-likes-count" style="margin: 0; font-size: 20px; color: #2d3748;">0</h3>
+                        <p style="margin: 0; font-size: 11px; color: #718096; font-weight: bold; text-transform: uppercase;">Likes</p>
+                    </div>
+                </div>
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 15px; padding: 15px; flex: 1; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="background: #ffedd5; color: #ea580c; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;"><i class="fas fa-coins"></i></div>
+                    <div style="text-align: left;">
+                        <h3 id="public-profile-coins-count" style="margin: 0; font-size: 20px; color: #2d3748;">0</h3>
+                        <p style="margin: 0; font-size: 11px; color: #718096; font-weight: bold; text-transform: uppercase;">DV Coins</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" id="public-msg-btn" style="width: 100%; margin-top: 20px; display: none; background-color: #3498db; border-radius: 8px;">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+        </div>
+    </div>
+
+    <!-- CHAT ROOM MODAL -->
+    <div id="chat-modal" class="modal-overlay">
+        <div class="modal-content" style="display: flex; flex-direction: column; padding: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 10px;">
+                <h3 style="margin: 0; font-size: 16px; color: #2d3748;"><i class="fas fa-user-circle"></i> <span id="chat-user-name">User</span></h3>
+                <span class="close-modal" id="close-chat-modal" style="position: static; font-size: 24px;">&times;</span>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Messages will load here -->
+            </div>
+            <form id="chat-form" class="chat-footer">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Type a message..." required autocomplete="off">
+                <button type="submit" class="btn" style="padding: 10px 15px; border-radius: 50%; width: auto; margin-top: 0; background: #3498db;"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, getDoc, updateDoc, increment, serverTimestamp, query, where, addDoc, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -107,6 +181,9 @@
         let timerInterval;
         let currentUser = null;
         let startTime = 0;
+        let currentChatId = null;
+        let currentChatTargetName = null;
+        let chatUnsubscribe = null;
 
         function getSundayId() {
             const d = new Date();
@@ -114,7 +191,8 @@
         }
 
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+            const screens = ['loading-screen', 'login-screen', 'lock-screen', 'already-played-screen', 'start-screen', 'quiz-screen', 'score-screen'];
+            screens.forEach(s => document.getElementById(s).style.display = 'none');
             document.getElementById(screenId).style.display = 'block';
         }
 
@@ -209,10 +287,8 @@
                 btn.style.cursor = 'not-allowed';
                 if(btn.innerText === correctText) btn.classList.add('correct');
             });
-
             if(selectedText !== correctText) selectedBtn.classList.add('wrong');
             else score++;
-
             document.getElementById('next-btn').style.display = 'block';
         }
 
@@ -247,6 +323,190 @@
                 console.error("Error saving score: ", e);
             }
         }
+
+        function getBadgeHTML(coins) {
+            if (coins >= 1000) return '<i class="fas fa-crown" style="color: #e8b923;" title="Grandmaster"></i>';
+            if (coins >= 500) return '<i class="fas fa-medal" style="color: #ffd700;" title="Expert"></i>';
+            if (coins >= 100) return '<i class="fas fa-medal" style="color: #c0c0c0;" title="Scholar"></i>';
+            if (coins >= 50) return '<i class="fas fa-medal" style="color: #cd7f32;" title="Rising Star"></i>';
+            return '';
+        }
+
+        window.viewUserProfile = async function(uid) {
+            if (!uid || uid === "undefined") return;
+            
+            const publicProfileModal = document.getElementById("public-profile-modal");
+            document.getElementById("public-profile-name").innerText = "Loading...";
+            document.getElementById("public-profile-badge").innerHTML = "";
+            document.getElementById("public-profile-likes-count").innerText = "0";
+            document.getElementById("public-profile-coins-count").innerText = "0";
+            document.getElementById("public-profile-bio").innerText = "";
+            
+            // Default icon ab graduation cap (fa-user-graduate) hai
+            document.getElementById("public-profile-avatar-container").innerHTML = `<i class="fas fa-user-graduate"></i>`;
+            
+            const msgBtn = document.getElementById("public-msg-btn");
+            msgBtn.style.display = "none";
+            publicProfileModal.style.display = "flex";
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", uid));
+                if(userDoc.exists()) {
+                    let uData = userDoc.data();
+                    document.getElementById("public-profile-name").innerText = uData.name || "Student";
+                    document.getElementById("public-profile-likes-count").innerText = uData.totalLikes || uData.likes || 0;
+                    document.getElementById("public-profile-coins-count").innerText = uData.dvCoins || 0;
+                    document.getElementById("public-profile-bio").innerText = uData.bio || "";
+                    
+                    if (uData.photoURL) {
+                        document.getElementById("public-profile-avatar-container").innerHTML = `<img src="${uData.photoURL}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    }
+                    
+                    document.getElementById("public-profile-badge").innerHTML = getBadgeHTML(uData.dvCoins || 0);
+                    
+                    if (currentUser && currentUser.uid !== uid) {
+                        msgBtn.style.display = "block";
+                        msgBtn.onclick = () => {
+                            publicProfileModal.style.display = "none";
+                            openChatModal(uid, uData.name);
+                        };
+                    }
+                }
+            } catch(e) {
+                console.error("Error loading profile: ", e);
+            }
+        };
+
+        function getChatId(uid1, uid2) {
+            return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+        }
+
+        window.openChatModal = function(targetUid, targetName) {
+            if (!currentUser) { alert("Please login to message."); return; }
+            
+            const chatModal = document.getElementById("chat-modal");
+            chatModal.style.display = "flex";
+            document.getElementById("chat-user-name").innerText = targetName;
+            document.getElementById("chat-body").innerHTML = "";
+            
+            currentChatId = getChatId(currentUser.uid, targetUid);
+            currentChatTargetName = targetName;
+            
+            if (chatUnsubscribe) chatUnsubscribe();
+            
+            const messagesRef = collection(db, "chats", currentChatId, "messages");
+            const q = query(messagesRef, orderBy("timestamp", "asc"));
+            
+            chatUnsubscribe = onSnapshot(q, (snapshot) => {
+                let html = "";
+                snapshot.forEach((docSnap) => {
+                    let msg = docSnap.data();
+                    let isMe = msg.sender === currentUser.uid;
+                    html += `<div class="msg-bubble ${isMe ? 'msg-sent' : 'msg-received'}">${msg.text}</div>`;
+                });
+                const chatBody = document.getElementById("chat-body");
+                chatBody.innerHTML = html;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        };
+
+        document.getElementById("chat-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!currentChatId || !currentUser) return;
+            
+            const input = document.getElementById("chat-input");
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = "";
+            
+            try {
+                const myUid = currentUser.uid;
+                let myName = document.getElementById('player-name').innerText;
+                const targetUid = currentChatId.replace(myUid, "").replace("_", "");
+                
+                await addDoc(collection(db, "chats", currentChatId, "messages"), {
+                    sender: myUid,
+                    text: text,
+                    timestamp: serverTimestamp()
+                });
+                
+                await setDoc(doc(db, "chats", currentChatId), {
+                    users: [myUid, targetUid],
+                    userNames: {
+                        [myUid]: myName,
+                        [targetUid]: currentChatTargetName
+                    },
+                    lastMessage: text,
+                    lastMessageTime: serverTimestamp()
+                }, { merge: true });
+                
+            } catch(e) { console.error("Error sending msg", e); }
+        });
+
+        document.getElementById("close-public-profile-modal").onclick = () => document.getElementById("public-profile-modal").style.display = "none";
+        document.getElementById("close-chat-modal").onclick = () => { 
+            document.getElementById("chat-modal").style.display = "none"; 
+            if(chatUnsubscribe) chatUnsubscribe(); 
+        };
+
+        async function loadLeaderboard() {
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            const leaderboardList = document.getElementById('leaderboard-list');
+            
+            const now = new Date();
+            const day = now.getDay();
+            const hours = now.getHours();
+            
+            if (day === 0 && hours >= 20 && hours < 21) {
+                leaderboardSection.style.display = 'block';
+                leaderboardList.innerHTML = '<p style="color: #3498db; font-weight: bold; font-family: sans-serif; background: white; padding: 10px; border-radius: 5px;">Tallying today\'s scores... Results out at 9:00 PM! ⏳</p>';
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "users"), where("isSundayChampion", "==", true));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    leaderboardSection.style.display = 'none';
+                    return;
+                }
+
+                let winners = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    winners.push({
+                        uid: doc.id,
+                        name: data.name || "Student",
+                        badge: data.championBadge || "",
+                        rank: (data.championBadge || "").includes("🥇") ? 1 : ((data.championBadge || "").includes("🥈") ? 2 : 3)
+                    });
+                });
+
+                winners.sort((a, b) => a.rank - b.rank);
+
+                let html = '';
+                winners.forEach(winner => {
+                    let borderColor = winner.rank === 1 ? '#FFD700' : (winner.rank === 2 ? '#C0C0C0' : '#CD7F32');
+                    html += `
+                        <div style="background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid ${borderColor}; margin-bottom: 5px; transition: 0.2s;">
+                            <a href="#" onclick="viewUserProfile('${winner.uid}'); return false;" style="color: white; font-size: 16px; font-weight: bold; font-family: sans-serif; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-user-circle" style="color: #FFD700; font-size: 20px;"></i> ${winner.name}
+                            </a>
+                            <span style="color: ${borderColor}; font-size: 16px; font-weight: bold;">${winner.badge}</span>
+                        </div>
+                    `;
+                });
+
+                leaderboardList.innerHTML = html;
+                leaderboardSection.style.display = 'block';
+
+            } catch (error) {
+                console.error("Leaderboard error: ", error);
+            }
+        }
+
+        window.addEventListener('load', loadLeaderboard);
     </script>
 </body>
 </html>
