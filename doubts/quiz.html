@@ -41,7 +41,7 @@
 <body>
 
     <div class="quiz-container">
-        <h1>Deep Vihar - Sunday Quiz</h1>
+        <h1>Deep Vihar - Live Quiz</h1>
         
         <div id="loading-screen" class="screen" style="display: block;">
             <h2><i class="fas fa-spinner fa-spin"></i> Checking Account...</h2>
@@ -50,28 +50,27 @@
 
         <div id="login-screen" class="screen">
             <h2 style="color: #e74c3c;"><i class="fas fa-lock"></i> Login Required</h2>
-            <p>You must be logged in to play the Sunday Quiz and earn DV Coins.</p>
+            <p>You must be logged in to play the Quiz and earn DV Coins.</p>
             <button class="btn" onclick="location.href='doubts.html'">Go to Doubt Hub to Login</button>
         </div>
 
         <div id="lock-screen" class="screen">
             <h2 style="color: #e74c3c;"><i class="fas fa-clock"></i> Quiz is Closed</h2>
-            <p>The Sunday Quiz is only open on <b>Sundays between 8:00 PM and 9:00 PM</b>.</p>
-            <p>Winners and Leaderboard will be announced on the Doubt Hub after 9:00 PM!</p>
+            <p>The Quiz is only open today between <b>1:00 PM and 1:30 PM</b>.</p>
+            <p>Results and Leaderboard will be announced on the Doubt Hub after 1:30 PM!</p>
             <button class="btn" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
         </div>
 
         <div id="already-played-screen" class="screen">
             <h2 style="color: #2ecc71;"><i class="fas fa-check-circle"></i> Quiz Completed!</h2>
-            <p>You have already submitted your quiz for this week.</p>
-            <p>Please wait until 9:00 PM for the results and Top 3 Leaderboard!</p>
+            <p>You have already submitted your quiz.</p>
+            <p>Please wait until results are declared at 1:30 PM!</p>
             <button class="btn" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
         </div>
 
         <div id="start-screen" class="screen">
-            <h2>Welcome, <span id="player-name">Student</span>!</h2>
-            <p>The quiz is now open. You have 20 minutes to answer 20 questions.</p>
-            <p>Make sure to finish before 9:00 PM.</p>
+            <h2>Ready to Start Quiz?</h2>
+            <p>You have 20 minutes to answer the questions.</p>
             <button class="btn" id="start-btn" style="background-color: #2ecc71;">Start Quiz Now</button>
         </div>
 
@@ -91,20 +90,20 @@
             <div class="final-score" id="score-display">0 / 20</div>
             <p>Participation Reward:</p>
             <div class="dvr-coins">+2 DV Coins 🪙</div>
-            <p style="font-size: 14px; color: #7f8c8d;">Top 3 winners will receive extra coins (50/30/10) and Badges after 9:00 PM.</p>
+            <p style="font-size: 14px; color: #7f8c8d;">Results will be declared at 1:30 PM.</p>
             <button class="btn" style="background-color: #2ecc71;" onclick="location.href='doubts.html'">Back to Doubt Hub</button>
         </div>
 
         <!-- LEADERBOARD SECTION -->
         <div id="leaderboard-section" style="display: none; margin: 30px auto 0 auto; background: #1e272e; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-            <h3 style="color: #ffd700; margin-top: 0; margin-bottom: 15px; font-family: sans-serif;"><i class="fas fa-crown"></i> Sunday Winners</h3>
+            <h3 style="color: #ffd700; margin-top: 0; margin-bottom: 15px; font-family: sans-serif;"><i class="fas fa-crown"></i> Quiz Winners</h3>
             <div id="leaderboard-list" style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- JS will populate winners here -->
             </div>
         </div>
     </div>
 
-    <!-- PUBLIC PROFILE MODAL (Updated Icon) -->
+    <!-- PUBLIC PROFILE MODAL -->
     <div id="public-profile-modal" class="modal-overlay">
         <div class="modal-content" style="background: linear-gradient(to bottom, #f8fafc, #ffffff); text-align: center;">
             <span class="close-modal" id="close-public-profile-modal">&times;</span>
@@ -194,6 +193,13 @@
             const screens = ['loading-screen', 'login-screen', 'lock-screen', 'already-played-screen', 'start-screen', 'quiz-screen', 'score-screen'];
             screens.forEach(s => document.getElementById(s).style.display = 'none');
             document.getElementById(screenId).style.display = 'block';
+
+            const leaderboardSection = document.getElementById('leaderboard-section');
+            if (screenId === 'start-screen' || screenId === 'lock-screen') {
+                leaderboardSection.style.display = 'block';
+            } else {
+                leaderboardSection.style.display = 'none';
+            }
         }
 
         onAuthStateChanged(auth, async (user) => {
@@ -204,18 +210,19 @@
             
             currentUser = user;
             const now = new Date();
-            const day = now.getDay(); 
-            const hour = now.getHours(); 
+            const todayDateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
 
-            if (day === 0 && hour === 20) {
+            // आज (9 Nov 2026) दोपहर 1:00 बजे से 1:30 बजे तक खुला रहेगा
+            const isTodayTestDate = (todayDateStr === "2026-11-9");
+            const isTimeOpen = (currentHour === 13 && currentMinute >= 0 && currentMinute <= 30);
+
+            if (isTodayTestDate && isTimeOpen) {
                 const resultDoc = await getDoc(doc(db, "quiz_results", `${getSundayId()}_${user.uid}`));
                 if (resultDoc.exists()) {
                     showScreen('already-played-screen');
                 } else {
-                    const userProfile = await getDoc(doc(db, "users", user.uid));
-                    if(userProfile.exists()) {
-                        document.getElementById('player-name').innerText = userProfile.data().name;
-                    }
                     showScreen('start-screen');
                 }
             } else {
@@ -304,7 +311,8 @@
             document.getElementById('score-display').innerText = `${score} / ${questionsList.length}`;
             
             const timeTaken = Math.floor((Date.now() - startTime) / 1000);
-            const userName = document.getElementById('player-name').innerText;
+            const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+            const userName = userDoc.exists() ? userDoc.data().name : "Student";
 
             try {
                 await setDoc(doc(db, "quiz_results", `${getSundayId()}_${currentUser.uid}`), {
@@ -341,8 +349,6 @@
             document.getElementById("public-profile-likes-count").innerText = "0";
             document.getElementById("public-profile-coins-count").innerText = "0";
             document.getElementById("public-profile-bio").innerText = "";
-            
-            // Default icon ab graduation cap (fa-user-graduate) hai
             document.getElementById("public-profile-avatar-container").innerHTML = `<i class="fas fa-user-graduate"></i>`;
             
             const msgBtn = document.getElementById("public-msg-btn");
@@ -381,7 +387,7 @@
             return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
         }
 
-        window.openChatModal = function(targetUid, targetName) {
+        window.openChatModal = async function(targetUid, targetName) {
             if (!currentUser) { alert("Please login to message."); return; }
             
             const chatModal = document.getElementById("chat-modal");
@@ -421,7 +427,8 @@
             
             try {
                 const myUid = currentUser.uid;
-                let myName = document.getElementById('player-name').innerText;
+                const userDoc = await getDoc(doc(db, "users", myUid));
+                const myName = userDoc.exists() ? userDoc.data().name : "Student";
                 const targetUid = currentChatId.replace(myUid, "").replace("_", "");
                 
                 await addDoc(collection(db, "chats", currentChatId, "messages"), {
@@ -450,25 +457,14 @@
         };
 
         async function loadLeaderboard() {
-            const leaderboardSection = document.getElementById('leaderboard-section');
             const leaderboardList = document.getElementById('leaderboard-list');
-            
-            const now = new Date();
-            const day = now.getDay();
-            const hours = now.getHours();
-            
-            if (day === 0 && hours >= 20 && hours < 21) {
-                leaderboardSection.style.display = 'block';
-                leaderboardList.innerHTML = '<p style="color: #3498db; font-weight: bold; font-family: sans-serif; background: white; padding: 10px; border-radius: 5px;">Tallying today\'s scores... Results out at 9:00 PM! ⏳</p>';
-                return;
-            }
 
             try {
                 const q = query(collection(db, "users"), where("isSundayChampion", "==", true));
                 const snapshot = await getDocs(q);
                 
                 if (snapshot.empty) {
-                    leaderboardSection.style.display = 'none';
+                    leaderboardList.innerHTML = '<p style="font-size:13px; color:#fff;">No champions announced yet.</p>';
                     return;
                 }
 
@@ -499,7 +495,6 @@
                 });
 
                 leaderboardList.innerHTML = html;
-                leaderboardSection.style.display = 'block';
 
             } catch (error) {
                 console.error("Leaderboard error: ", error);
